@@ -6,7 +6,7 @@ const redis = require('redis');
 
 const app = express();
 
-const client = redis.createClient(6379);
+const client = redis.createClient(process.env.REDIS_URL);
 
 app.use(morgan('dev'));
 app.use(express.json());
