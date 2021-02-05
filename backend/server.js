@@ -75,4 +75,7 @@ if (process.env.NODE_ENV === 'production') {
     res.send('API is running....');
   });
 }
-app.listen(3001, console.log('Server running on port 3001'));
+app.listen(
+  process.env.PORT || 3001,
+  console.log('Server running on port 3001')
+);
