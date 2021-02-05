@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const fetch = require('node-fetch');
 const cors = require('cors');
 const redis = require('redis');
+const path = require('path');
 
 const app = express();
 
@@ -11,18 +12,6 @@ const client = redis.createClient(process.env.REDIS_URL);
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors());
-
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '/frontend/build')));
-
-  app.get('*', (req, res) =>
-    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
-  );
-} else {
-  app.get('/', (req, res) => {
-    res.send('API is running....');
-  });
-}
 
 app.get('/api/search', (req, res) => {
   try {
@@ -73,4 +62,17 @@ app.get('/api/search', (req, res) => {
   }
 });
 
+const dirname = path.resolve();
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(dirname, '/frontend/build')));
+
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(dirname, 'frontend', 'build', 'index.html'))
+  );
+} else {
+  app.get('/', (req, res) => {
+    res.send('API is running....');
+  });
+}
 app.listen(3001, console.log('Server running on port 3001'));
